@@ -95,8 +95,18 @@ while (true)
         pointsDealt = (int)Math.Ceiling((double)pointsDealt / 100) * 100;
     }
 
+    //Determine if it was a tsumo or a ron and recalculate if it was a tsumo
+    if (userRon)
+    {
+        Console.WriteLine("The person who dealt in has to pay: " + pointsDealt);
+    }
+    else
+    {
+        pointsDealt = (int)Math.Ceiling((double)pointsDealt / 300) * 100;
+        Console.WriteLine("Everyone has to pay the dealer: " + pointsDealt);
+    }
 
-    Console.WriteLine(pointsDealt);
+
     Console.ReadKey();
 }
 
