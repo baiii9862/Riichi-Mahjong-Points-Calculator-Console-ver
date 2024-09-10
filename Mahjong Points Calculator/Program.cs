@@ -8,25 +8,35 @@ using System.Runtime.CompilerServices;
 
 bool userDealer;
 bool userRon;
+bool repeatCalculations = true;
 int userHan = 0;
 int userFu = 0;
 int multipleYakuman = -1;
 int pointsDealt = 0;
 
-//Asking the user if they are a dealer or not. And if they won with a ron
-userDealer =  usefulMethods.getUserInput("Are you the Dealer Or Not [Y/N]");
-userRon = usefulMethods.getUserInput("Did you win the game with a Ron [Y/N]");
 
-//Obtaining the amount of fu and Han a user has.
-userHan = usefulMethods.getUserInput("How many han is there in the winning hand", 0, 103);
-
-while (true)
+while (repeatCalculations)
 {
+    if (repeatCalculations)
+    {
+        userHan = 0;
+        userFu = 0;
+        multipleYakuman = 0;
+        pointsDealt = 0;
+    }
+
+    //Asking the user if they are a dealer or not. And if they won with a ron
+    userDealer = usefulMethods.getUserInput("Are you the Dealer Or Not [Y/N]");
+    userRon = usefulMethods.getUserInput("Did you win the game with a Ron [Y/N]");
+
+    //Obtaining the amount of fu and Han a user has.
+    userHan = usefulMethods.getUserInput("How many han is there in the winning hand", 0, 103);
+
     //Check if there is multiple yakuman
     if (userHan > 12)
     {
         userHan = 13;
-        multipleYakuman = usefulMethods.getUserInput("How many Yakuman is there?", -1, 7);
+        multipleYakuman = usefulMethods.getUserInput("How many Yakuman is there?", 0, 7);
     }
 
     if (userHan < 5)
@@ -66,34 +76,40 @@ while (true)
             case 5:
                 pointsDealt = 12000;
                 break;
-            case 6:
-            case 7:
+            case 6: case 7:
                 pointsDealt = 18000;
                 break;
-            case 8:
-            case 9:
-            case 10:
+            case 8: case 9: case 10:
                 pointsDealt = 24000;
                 break;
-            case 11:
-            case 12:
+            case 11: case 12:
                 pointsDealt = 36000;
                 break;
             case 13:
                 pointsDealt = 48000;
                 break;
         }
+        if (!userDealer)
+            pointsDealt = (int)(pointsDealt / 1.5);
     }
     else
     {
         //Calculating base points
         pointsDealt = userFu * (int)Math.Pow(2, (2 + userHan));
-        //Obtaining the amount of points dealt
+
+        //Obtaining the amount of points dealt for dealer and nondealer
+        if (!userDealer)
+            pointsDealt = (int)(pointsDealt / 1.5);
+
         pointsDealt = pointsDealt * 6;
 
         //Rounding the number up to the nearest 100
         pointsDealt = (int)Math.Ceiling((double)pointsDealt / 100) * 100;
     }
+
+    //Adjusting points if there is multiple yakuman
+    if (multipleYakuman > 1)
+        pointsDealt = pointsDealt * multipleYakuman;
 
     //Determine if it was a tsumo or a ron and recalculate if it was a tsumo
     if (userRon)
@@ -102,12 +118,30 @@ while (true)
     }
     else
     {
-        pointsDealt = (int)Math.Ceiling((double)pointsDealt / 300) * 100;
-        Console.WriteLine("Everyone has to pay the dealer: " + pointsDealt);
+        //Calculating how much each person has to pay the dealer in a tsumo.
+        if (userDealer)
+        {
+            pointsDealt = (int)Math.Ceiling((double)pointsDealt / 300) * 100;
+            Console.WriteLine("Everyone has to pay the dealer: " + pointsDealt);
+        }
+        else
+        {
+            //If the points are odd they need to be bumped up by 100 to split evenly
+            if(pointsDealt % 200 != 0)
+                pointsDealt += 100;
+
+            //Calculate the points dealer has to pay
+            int pointsDealtDealer = pointsDealt / 2;
+            int pointsDealtNonDealer = (int)Math.Ceiling((double)pointsDealtDealer / 200) * 100;
+
+            Console.WriteLine("Non Dealers have to pay: " + pointsDealtNonDealer);
+            Console.WriteLine("The Dealer has to pay: " + pointsDealtDealer);
+        }
     }
 
-
     Console.ReadKey();
+    repeatCalculations = usefulMethods.getUserInput("Would you like to calculate another winning hand?");
+
 }
 
 
@@ -125,7 +159,7 @@ class usefulMethods
             Console.Clear();
             Console.WriteLine(question);
             userInput = Console.ReadLine() ?? "";
-            userInput.ToUpper();
+            userInput = userInput.ToUpper();
         }
 
         //Returns True or false
