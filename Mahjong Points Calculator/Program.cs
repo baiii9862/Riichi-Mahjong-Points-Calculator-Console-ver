@@ -2,7 +2,6 @@
 // Description: This program takes in the parameters, han, fu, if a person is the dealer. 
 //              It then displays how much each player[s] should pay the person who has won
 // Date: 2024/09/10
-//
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
@@ -42,13 +41,26 @@ while (repeatCalculations)
     if (userHan < 5)
     {
         int fuMinimum = 0;
+        int fuMaximum = 110;
 
         if (userRon)
             fuMinimum = 25;
         else
             fuMinimum = 20;
 
-        userFu = usefulMethods.getUserInput("How many fu is there in the winning hand", fuMinimum, 110);
+
+        //Edge case and impossible hands
+        if(userHan == 1)
+        {
+            fuMaximum = 100;
+            fuMinimum = 30;
+        }
+        else if(userHan == 2 && !userRon)
+        {
+            fuMinimum = 30;
+        }
+
+        userFu = usefulMethods.getUserInput("How many fu is there in the winning hand", fuMinimum, fuMaximum);
 
         //Rounding up the user's fu to nearest 10 if not 25 fu
         if (userFu != 25)
@@ -61,8 +73,6 @@ while (repeatCalculations)
             userFu = 0;
         }
     }
-
-
 
     //Basic calculations for dealer
     //Formula for dealer points calculation is
