@@ -3,22 +3,16 @@
 //              It then displays how much each player[s] should pay the person who has won
 // Date: 2024/09/10
 //
-string userDealer = "";
-Boolean userRon = false;
+bool userDealer;
+bool userRon;
 int userHan = 0;
 int userFu = 0;
 int multipleYakuman = -1;
 int pointsDealt = 0;
 
-//Asking the user if they are a dealer or not.
-//Loops while not supplied a valid answer
-while (!string.Equals(userDealer, "Y") && !string.Equals(userDealer, "N"))
-{
-    Console.Clear();
-    Console.WriteLine("Are you the Dealer Or Not [Y/N]");
-    userDealer = Console.ReadLine() ?? "";
-    userDealer.ToUpper();
-}
+//Asking the user if they are a dealer or not. And if they won with a ron
+userDealer = getUserInput("Are you the Dealer Or Not [Y/N]");
+userRon = getUserInput("Did you win the game with a Ron [Y/N]");
 
 
 //Asks the user to input the amount of han
@@ -76,6 +70,25 @@ if(userHan > 4)
 
 
 
-Console.WriteLine(userDealer, userHan, userFu, pointsDealt);
 Console.ReadKey();
 
+//Method for obtaining user's input in a true or false form
+bool getUserInput(string question)
+{
+    string userInput = "";
+
+    //Loops until Y or N is provided
+    while (userInput != "Y" || userInput != "N")
+    {
+        Console.Clear();
+        Console.WriteLine(question);
+        userInput = Console.ReadLine() ?? "";
+        userInput.ToUpper();
+    }
+
+    //Returns True or false
+    if (userInput == "Y")
+        return true;
+    else
+        return false;
+}
