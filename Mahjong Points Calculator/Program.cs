@@ -30,7 +30,7 @@ while (repeatCalculations)
     userRon = usefulMethods.getUserInput("Did you win the game with a Ron [Y/N]");
 
     //Obtaining the amount of fu and Han a user has.
-    userHan = usefulMethods.getUserInput("How many han is there in the winning hand", 0, 103);
+    userHan = usefulMethods.getUserInput("How many han is there in the winning hand", 1, 103);
 
     //Check if there is multiple yakuman
     if (userHan > 12)
@@ -140,7 +140,7 @@ while (repeatCalculations)
     }
 
     Console.ReadKey();
-    repeatCalculations = usefulMethods.getUserInput("Would you like to calculate another winning hand?");
+    repeatCalculations = usefulMethods.getUserInput("Would you like to calculate another winning hand? [Y/N]");
 
 }
 
